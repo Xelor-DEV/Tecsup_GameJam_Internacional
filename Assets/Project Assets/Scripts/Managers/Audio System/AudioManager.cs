@@ -80,6 +80,8 @@ public class AudioManager : NonPersistentSingleton<AudioManager>
         {
             GameObject sfxInstance = Instantiate(sfxPrefab, transform);
             sfxSources[i] = sfxInstance.GetComponent<AudioSource>();
+            sfxSources[i].playOnAwake = false;
+            sfxSources[i].clip = sfxClips[i];
         }
     }
 
@@ -165,11 +167,21 @@ public class AudioManager : NonPersistentSingleton<AudioManager>
     }
 
     // SFX Playback Methods
-    public void PlaySfx(int index)
+    public void PlaySfxOneShot(int index)
     {
         if (index < 0 || index >= sfxClips.Length || isPaused) return;
 
         sfxSources[index].PlayOneShot(sfxClips[index]);
+    }
+
+    public void PlaySfx(int index, bool loop = false)
+    {
+        if (index < 0 || index >= sfxClips.Length || isPaused) return;
+
+        AudioSource source = sfxSources[index];
+        source.clip = sfxClips[index];
+        source.loop = loop;
+        source.Play();
     }
 
     public AudioSource GetAudioSourceByIndex(int index)
