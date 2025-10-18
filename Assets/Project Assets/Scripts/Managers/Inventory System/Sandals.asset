@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c241b3e142fd64a8d2a79042c8c6e8, type: 3}
+  m_Name: Sandals
+  m_EditorClassIdentifier: 
+  itemName: Pair of Sandals
+  icon: {fileID: -2353224026514004246, guid: c33e128db33acf14ca52ecf11fb33602, type: 3}
+  itemType: 0
+  prefab: {fileID: 4898850740843613654, guid: 82d84a1ce6441dd4783dd23776b4bb65, type: 3}

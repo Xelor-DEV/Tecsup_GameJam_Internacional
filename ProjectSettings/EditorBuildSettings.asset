@@ -6,8 +6,17 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Project Assets/Scenes/Cinematic.unity
+    guid: a19cfb6bf22096e47b03326dca446a2a
+  - enabled: 1
     path: Assets/Project Assets/Scenes/MainMenu.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
+  - enabled: 1
+    path: Assets/Project Assets/Scenes/Day.unity
+    guid: e70063ce21c866040b3714ce57bcf9e4
+  - enabled: 1
+    path: Assets/Project Assets/Scenes/Night.unity
+    guid: 38185dafb12b62a4bb5ebe95efaf5c21
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

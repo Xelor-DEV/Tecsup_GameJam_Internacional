@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c1c241b3e142fd64a8d2a79042c8c6e8, type: 3}
+  m_Name: Eye Drops
+  m_EditorClassIdentifier: 
+  itemName: Eye Drops
+  icon: {fileID: -6152681360527795351, guid: 303e60606e3fcb345adb7819b36eb5da, type: 3}
+  itemType: 7
+  prefab: {fileID: 3111259853919388620, guid: fc2f982cbd69a134ca2ac9b2424dd068, type: 3}
