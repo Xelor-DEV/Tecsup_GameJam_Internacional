@@ -11,19 +11,23 @@ public class DropItemData
 
 public class RandomDropEnemy : Attackable
 {
-    [Header("Drop Settings")]
+    [Header("Guaranteed Drop Settings")]
     [SerializeField] private DropItemData[] possibleDrops;
     [SerializeField] private float knockbackForce = 15f;
-    [SerializeField] private float decelerationForce = 8f; // Reducido para frenado más suave
-    [SerializeField] private float minSpeedThreshold = 0.2f; // Velocidad mínima antes de detenerse completamente
+    [SerializeField] private float decelerationForce = 8f;
+    [SerializeField] private float minSpeedThreshold = 0.2f;
+    [SerializeField] private float stunDuration = 0.2f;
+    [SerializeField] private EnemyCombat enemyCombat;
+
+    private EnemyAI enemyAI;
 
     private bool isKnockback = false;
     private Vector2 knockbackVelocity;
-    private Coroutine knockbackCoroutine;
 
     protected override void Awake()
     {
         base.Awake();
+        enemyAI = GetComponent<EnemyAI>();
         healthManager.OnDeath.AddListener(OnDeath);
     }
 
@@ -33,48 +37,49 @@ public class RandomDropEnemy : Attackable
 
         base.TakeDamage(damage);
 
-        if (knockbackCoroutine != null)
-            StopCoroutine(knockbackCoroutine);
+        // NUEVO: Interrumpir ataque si está atacando
+        if (enemyCombat != null && enemyCombat.IsAttacking)
+        {
+            enemyCombat.InterruptAttack();
+        }
 
-        knockbackCoroutine = StartCoroutine(KnockbackEffect());
+        if (!isKnockback)
+        {
+            StartCoroutine(KnockbackEffect());
+        }
     }
 
+    // Resto del código permanece igual...
     private IEnumerator KnockbackEffect()
     {
-        if (isKnockback) yield break;
-
         isKnockback = true;
+        enemyAI.SetStunned(true);
 
-        // Calcular dirección y velocidad inicial del knockback
         Vector2 direction = CalculateKnockbackDirection();
         direction.y = 0;
         direction.Normalize();
 
         knockbackVelocity = direction * knockbackForce;
+        enemyAI.Rb.linearVelocity = new Vector2(knockbackVelocity.x, enemyAI.Rb.linearVelocity.y);
 
-        // Aplicar velocidad inicial
-        rb.linearVelocity = new Vector2(knockbackVelocity.x, rb.linearVelocity.y);
-
-        // Desaceleración progresiva más suave
-        while (Mathf.Abs(rb.linearVelocity.x) > minSpeedThreshold)
+        while (Mathf.Abs(enemyAI.Rb.linearVelocity.x) > minSpeedThreshold)
         {
-            // Calcular desaceleración (más suave)
             float deceleration = decelerationForce * Time.fixedDeltaTime;
-            float currentSpeed = Mathf.Abs(rb.linearVelocity.x);
-
-            // Reducir velocidad de manera más gradual
+            float currentSpeed = Mathf.Abs(enemyAI.Rb.linearVelocity.x);
             float newSpeed = Mathf.Max(0, currentSpeed - deceleration);
-            rb.linearVelocity = new Vector2(
-                Mathf.Sign(rb.linearVelocity.x) * newSpeed,
-                rb.linearVelocity.y
+            enemyAI.Rb.linearVelocity = new Vector2(
+                Mathf.Sign(enemyAI.Rb.linearVelocity.x) * newSpeed,
+                enemyAI.Rb.linearVelocity.y
             );
-
             yield return new WaitForFixedUpdate();
         }
 
-        // Detener completamente
-        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+        enemyAI.Rb.linearVelocity = new Vector2(0, enemyAI.Rb.linearVelocity.y);
+
+        yield return new WaitForSeconds(stunDuration);
+
         isKnockback = false;
+        enemyAI.SetStunned(false);
     }
 
     protected override void OnDeath()
