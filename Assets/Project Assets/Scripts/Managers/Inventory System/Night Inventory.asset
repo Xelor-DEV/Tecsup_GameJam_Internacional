@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c021f6ba66a120c4fb7f7e7402dea628, type: 3}
   m_Name: Night Inventory
   m_EditorClassIdentifier: 
-  maxSize: 3
+  maxSize: 4
   items:
-  - {fileID: 11400000, guid: 802b8aab84a216041b0f69c6bc25ab62, type: 2}
-  - {fileID: 11400000, guid: 802b8aab84a216041b0f69c6bc25ab62, type: 2}
-  - {fileID: 11400000, guid: 802b8aab84a216041b0f69c6bc25ab62, type: 2}
+  - {fileID: 11400000, guid: fae6a2bf433920e408203c951749afb7, type: 2}
+  - {fileID: 11400000, guid: 4deff8c9c9cb5e44aab884011672bec9, type: 2}
+  - {fileID: 11400000, guid: 6c3e729c1b85f894e9e8cda294e06b8d, type: 2}
+  - {fileID: 11400000, guid: fae6a2bf433920e408203c951749afb7, type: 2}

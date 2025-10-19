@@ -98,8 +98,17 @@ public class EnemyAI : MonoBehaviour
             return;
         }
 
+        // Verificar si el objetivo está en rango de ataque
+        bool inAttackRange = combat.IsTargetInAttackRange(vision.Target);
+
+        // Notificar al combat si el objetivo sale del rango
+        if (!inAttackRange && combat.HasFirstAttack)
+        {
+            combat.NotifyTargetExitedRange();
+        }
+
         // Si el objetivo está en rango de ataque, atacar
-        if (combat.IsTargetInAttackRange(vision.Target))
+        if (inAttackRange)
         {
             ChangeState(EnemyState.Attacking);
             return;
@@ -118,8 +127,12 @@ public class EnemyAI : MonoBehaviour
         // Solo intentar atacar si NO está actualmente atacando y PUEDE atacar
         if (!combat.IsAttacking && combat.CanAttack)
         {
-            // Usar ataque inmediato si es el primero o hay prioridad
-            if (!combat.HasFirstAttack || combat.Priority.hasHyperArmor)
+            // DECISIÓN MEJORADA: Usar ataque inmediato solo si es el primer ataque del encuentro
+            // y se permite el ataque inmediato, O si tiene HyperArmor
+            bool shouldUseImmediateAttack = (!combat.HasFirstAttack && combat.AllowImmediateFirstAttack) ||
+                                          combat.Priority.hasHyperArmor;
+
+            if (shouldUseImmediateAttack)
             {
                 combat.StartImmediateAttack();
             }
@@ -129,7 +142,7 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        // Transiciones - IMPORTANTE: Si no puede atacar y no está atacando, cambiar a chasing
+        // Transiciones MEJORADAS
         if (vision.Target == null)
         {
             ChangeState(EnemyState.Patrolling);
@@ -141,7 +154,28 @@ public class EnemyAI : MonoBehaviour
         }
         else if (!combat.IsTargetInAttackRange(vision.Target))
         {
+            // Si el objetivo sale del rango de ataque, volver a perseguir
             ChangeState(EnemyState.Chasing);
+        }
+    }
+
+    private void CheckTargetExitRange()
+    {
+        // Si el objetivo sale del rango de ataque, resetear el primer ataque para el próximo encuentro
+        if (vision.Target != null && !combat.IsTargetInAttackRange(vision.Target) && combat.HasFirstAttack)
+        {
+            // Opcional: puedes agregar un pequeño delay antes de resetear
+            StartCoroutine(ResetFirstAttackAfterDelay());
+        }
+    }
+
+    private IEnumerator ResetFirstAttackAfterDelay()
+    {
+        yield return new WaitForSeconds(1f); // Esperar 1 segundo antes de resetear
+        if (vision.Target != null && !combat.IsTargetInAttackRange(vision.Target))
+        {
+            combat.ResetFirstAttack();
+            Debug.Log("🔄 Primer ataque reseteado - jugador salió del rango");
         }
     }
 
@@ -229,6 +263,20 @@ public class EnemyAI : MonoBehaviour
                 StopAllCoroutines();
                 isWaiting = false;
                 break;
+            case EnemyState.Chasing:
+                // Notificar al combat cuando sale de chasing (objetivo perdido)
+                if (newState == EnemyState.Patrolling)
+                {
+                    combat.NotifyTargetExitedRange();
+                }
+                break;
+            case EnemyState.Attacking:
+                // Si está saliendo de ataque y va a patrulla, resetear
+                if (newState == EnemyState.Patrolling)
+                {
+                    combat.NotifyTargetExitedRange();
+                }
+                break;
         }
 
         // Entrar al nuevo estado
@@ -242,17 +290,19 @@ public class EnemyAI : MonoBehaviour
                 break;
             case EnemyState.Chasing:
                 rb.linearVelocity = Vector2.zero;
-                UpdateMovementAnimation(false); // Forzar actualización inmediata
+                UpdateMovementAnimation(false);
                 break;
             case EnemyState.Attacking:
                 rb.linearVelocity = Vector2.zero;
-                UpdateMovementAnimation(false); // Forzar actualización inmediata
+                UpdateMovementAnimation(false);
                 break;
             case EnemyState.Stunned:
                 rb.linearVelocity = Vector2.zero;
-                UpdateMovementAnimation(false); // Forzar actualización inmediata
+                UpdateMovementAnimation(false);
                 break;
         }
+
+        Debug.Log($"🔄 Enemigo cambió de estado: {currentState} -> {newState}");
     }
 
     public void SetStunned(bool stunned)

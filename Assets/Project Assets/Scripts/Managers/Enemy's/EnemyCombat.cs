@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using DG.Tweening;
+using System.Collections;
 
 public class EnemyCombat : MonoBehaviour
 {
@@ -33,26 +34,32 @@ public class EnemyCombat : MonoBehaviour
     [Range(0.1f, 1f)]
     [SerializeField] private float headbuttCurveCompletion = 0.5f; // Nuevo: controla cuánto de la curva se recorre
 
+    [Header("First Attack Settings")]
+    [SerializeField] private bool allowImmediateFirstAttack = true;
+    [SerializeField] private float resetFirstAttackDelay = 2f;
+
     // Estados de combate
     private bool isAttacking = false;
     private bool detectionActive = false;
     private bool hasAppliedDamage = false;
     private float lastAttackTime;
     private bool hasFirstAttack = false;
-
     private bool wasInterrupted = false;
-
-    // Safety timer para evitar ataques infinitos
     private float attackStartTime;
+
+    public bool AllowImmediateFirstAttack => allowImmediateFirstAttack;
 
     // Variables para la animación de cabezaso
     private Tween headbuttTween;
     private Vector3 originalHeadbuttPosition;
 
-    // NUEVA PROPIEDAD: Primer ataque no tiene cooldown
-    public bool CanAttack => !hasFirstAttack || Time.time >= lastAttackTime + attackCooldown;
     public bool IsAttacking => isAttacking;
     public AttackPriority Priority => attackPriority;
+    private bool hasUsedFirstAttackInEncounter = false;
+    private float lastTargetExitTime;
+
+    // MODIFICAR la propiedad CanAttack
+    public bool CanAttack => !isAttacking && (Time.time >= lastAttackTime + attackCooldown);
 
     private Vector2 originalAttackPointPosition;
 
@@ -114,12 +121,10 @@ public class EnemyCombat : MonoBehaviour
         lastAttackTime = Time.time;
         attackStartTime = Time.time;
 
-        // ACTIVAR DETECCIÓN INMEDIATAMENTE para el primer frame
-        detectionActive = true;
-        hasAppliedDamage = false;
-
-        if (!hasFirstAttack)
+        // Solo marcar primer ataque si no se ha usado en este encuentro
+        if (!hasUsedFirstAttackInEncounter)
         {
+            hasUsedFirstAttackInEncounter = true;
             hasFirstAttack = true;
         }
 
@@ -139,19 +144,23 @@ public class EnemyCombat : MonoBehaviour
             StartHeadbuttAnimation();
         }
 
-        Debug.Log("🧌 Ataque de enemigo iniciado INMEDIATAMENTE");
+        Debug.Log("🧌 Ataque de enemigo iniciado NORMAL");
     }
 
     public void StartImmediateAttack()
     {
         if (isAttacking) return;
 
-        // Ignorar cooldown para ataque inmediato
         isAttacking = true;
         wasInterrupted = false;
         detectionActive = true;
         hasAppliedDamage = false;
+        lastAttackTime = Time.time;
         attackStartTime = Time.time;
+
+        // Marcar que ya usó el primer ataque inmediato en este encuentro
+        hasUsedFirstAttackInEncounter = true;
+        hasFirstAttack = true;
 
         if (enemyAI != null)
         {
@@ -172,7 +181,22 @@ public class EnemyCombat : MonoBehaviour
         // Forzar primera detección inmediata
         DetectTargets();
 
-        Debug.Log("⚡ Ataque INMEDIATO iniciado");
+        Debug.Log("⚡ Ataque INMEDIATO iniciado (Primer ataque del encuentro)");
+    }
+
+    public void NotifyTargetExitedRange()
+    {
+        if (!isAttacking)
+        {
+            StartCoroutine(ResetFirstAttackAfterDelay());
+        }
+    }
+
+    private IEnumerator ResetFirstAttackAfterDelay()
+    {
+        yield return new WaitForSeconds(resetFirstAttackDelay);
+        hasUsedFirstAttackInEncounter = false;
+        Debug.Log("🔄 Primer ataque reseteado - objetivo salió del rango");
     }
 
     private void StartHeadbuttAnimation()

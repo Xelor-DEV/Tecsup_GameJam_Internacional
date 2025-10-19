@@ -125,24 +125,26 @@ public class GrabManager : MonoBehaviour
 
     private void DropLastItem()
     {
-        int lastItemIndex = -1;
+        int droppableItemIndex = -1;
 
+        // Buscar desde el último item hacia atrás hasta encontrar uno que sea dropeable
         for (int i = inventoryDatabase.ArraySize - 1; i >= 0; i--)
         {
-            if (inventoryDatabase.GetItem(i) != null)
+            InventoryItem item = inventoryDatabase.GetItem(i);
+            if (item != null && item.isDroppable)
             {
-                lastItemIndex = i;
+                droppableItemIndex = i;
                 break;
             }
         }
 
-        if (lastItemIndex != -1)
+        if (droppableItemIndex != -1)
         {
-            DropItemAtIndex(lastItemIndex);
+            DropItemAtIndex(droppableItemIndex);
         }
         else
         {
-            Debug.Log("No hay objetos en el inventario para dropear");
+            Debug.Log("No hay objetos dropeables en el inventario");
         }
     }
 
@@ -150,7 +152,7 @@ public class GrabManager : MonoBehaviour
     {
         InventoryItem itemToDrop = inventoryDatabase.GetItem(index);
 
-        if (itemToDrop != null && itemToDrop.prefab != null)
+        if (itemToDrop != null && itemToDrop.prefab != null && itemToDrop.isDroppable)
         {
             // Calcular posición de drop (frente al jugador)
             Vector2 dropDirection = GetPlayerFacingDirection();
@@ -161,7 +163,10 @@ public class GrabManager : MonoBehaviour
 
             // Asegurar que el objeto dropeado tenga los componentes necesarios
             ItemManager itemManager = droppedObject.GetComponent<ItemManager>();
-            itemManager.SetItem(itemToDrop);
+            if (itemManager != null)
+            {
+                itemManager.SetItem(itemToDrop);
+            }
 
             // Animación suave con DOTween - movimiento en arco
             AnimateDrop(droppedObject, dropPosition);
@@ -170,6 +175,10 @@ public class GrabManager : MonoBehaviour
             inventoryDatabase.RemoveItem(index);
 
             Debug.Log($"Objeto dropeado: {itemToDrop.itemName}");
+        }
+        else if (itemToDrop != null && !itemToDrop.isDroppable)
+        {
+            Debug.LogWarning($"El objeto {itemToDrop.itemName} no es dropeable");
         }
     }
 

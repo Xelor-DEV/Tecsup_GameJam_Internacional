@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Bolt
   m_EditorClassIdentifier: 
   itemName: Bolt
-  icon: {fileID: -7430558899833497709, guid: 482b2d99b0c0c7841ba66353708fee9c, type: 3}
+  icon: {fileID: 21300000, guid: 07c1bdb3da5deeb49a0877e21c484fb9, type: 3}
   itemType: 4
   prefab: {fileID: 6102505213892619019, guid: 23bbcc6f7f47c4841bc669aa73b48671, type: 3}

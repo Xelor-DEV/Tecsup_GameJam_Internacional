@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Bouquet of Flowers
   m_EditorClassIdentifier: 
   itemName: Bouquet of Flowers
-  icon: {fileID: 8510851351252473510, guid: dd2e0674260aa4d438afe934a454fb28, type: 3}
+  icon: {fileID: 21300000, guid: 29c4469feaf96964ebb59e7116571339, type: 3}
   itemType: 3
   prefab: {fileID: 8677370741149500423, guid: c03e93828a928044b816392b6028b336, type: 3}
+  isDroppable: 0

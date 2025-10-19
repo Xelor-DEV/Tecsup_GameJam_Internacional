@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Eye Drops
   m_EditorClassIdentifier: 
   itemName: Eye Drops
-  icon: {fileID: -6152681360527795351, guid: 303e60606e3fcb345adb7819b36eb5da, type: 3}
+  icon: {fileID: 21300000, guid: a1dc68b47333e2c4eb5c631c5ca52115, type: 3}
   itemType: 7
   prefab: {fileID: 3111259853919388620, guid: fc2f982cbd69a134ca2ac9b2424dd068, type: 3}
