@@ -115,12 +115,13 @@ public class EnemyAI : MonoBehaviour
         // Detener movimiento durante ataque
         rb.linearVelocity = Vector2.zero;
 
+        // Solo intentar atacar si NO está actualmente atacando y PUEDE atacar
         if (!combat.IsAttacking && combat.CanAttack)
         {
             // Usar ataque inmediato si es el primero o hay prioridad
             if (!combat.HasFirstAttack || combat.Priority.hasHyperArmor)
             {
-                combat.StartImmediateAttack(); // Nuevo método
+                combat.StartImmediateAttack();
             }
             else
             {
@@ -128,10 +129,15 @@ public class EnemyAI : MonoBehaviour
             }
         }
 
-        // Transiciones
+        // Transiciones - IMPORTANTE: Si no puede atacar y no está atacando, cambiar a chasing
         if (vision.Target == null)
         {
             ChangeState(EnemyState.Patrolling);
+        }
+        else if (!combat.IsAttacking && !combat.CanAttack)
+        {
+            // Si no puede atacar (en cooldown) y no está atacando, volver a perseguir
+            ChangeState(EnemyState.Chasing);
         }
         else if (!combat.IsTargetInAttackRange(vision.Target))
         {
