@@ -2,6 +2,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
 using DG.Tweening;
+using UnityEngine.InputSystem;
+using TMPro;
 
 public class MainMenu_UI : MonoBehaviour
 {
@@ -13,9 +15,74 @@ public class MainMenu_UI : MonoBehaviour
     [Header("DOTween Animation Settings")]
     [SerializeField] private float animationDuration = 0.5f;
     [SerializeField] private Ease easeType = Ease.OutBack;
+    [Header("Character References")]
+    [SerializeField] private RectTransform player;
+    [SerializeField] private RectTransform kids;
+    [Header("Hide Positions")]
+    [SerializeField] private RectTransform playerHidePosition;
+    [SerializeField] private RectTransform kidsHidePosition;
+    [SerializeField] private RectTransform selectionMenuHidePosition;
+    [Header("Show Positions")]
+    [SerializeField] private RectTransform selectionMenuShowPosition;
+    [Header("Selection Menu")]
+    [SerializeField] private RectTransform selectionMenu;
+    [Header("Individual Animation Durations")]
+    [SerializeField] private float playerAnimationDuration = 0.5f;
+    [SerializeField] private float kidsAnimationDuration = 0.5f;
+    [SerializeField] private float menuAnimationDuration = 0.5f;
+    [SerializeField] private Ease easeOther = Ease.Linear;
+    [SerializeField] private TMP_Text message;
 
     private Coroutine loadingCoroutine;
     private bool isAnimating = false;
+    private bool isSelectionMenuVisible = false;
+
+    private void Start()
+    {
+        // Inicializar posiciones
+        selectionMenu.position = selectionMenuHidePosition.position;
+    }
+
+    public void OnToggleSelectionMenu(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            ToggleSelectionMenu();
+        }
+    }
+
+    private void ToggleSelectionMenu()
+    {
+        if (isAnimating) return;
+
+        if (!isSelectionMenuVisible)
+        {
+            ShowSelectionMenu();
+        }
+        // Removido el else para que el menú no se oculte una vez mostrado
+    }
+
+    private void ShowSelectionMenu()
+    {
+        isAnimating = true;
+
+        // Ocultar personajes con duraciones individuales
+        player.DOMove(playerHidePosition.position, playerAnimationDuration).SetEase(easeOther);
+        kids.DOMove(kidsHidePosition.position, kidsAnimationDuration).SetEase(easeOther)
+            .OnComplete(() =>
+            {
+
+            });
+        // Mostrar menú de selección con duración específica
+        selectionMenu.DOMove(selectionMenuShowPosition.position, menuAnimationDuration)
+            .SetEase(easeType)
+            .OnComplete(() =>
+            {
+                isAnimating = false;
+                isSelectionMenuVisible = true;
+            });
+        message.text = string.Empty;
+    }
 
     public void LoadGameScene()
     {

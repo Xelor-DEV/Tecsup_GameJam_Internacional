@@ -37,6 +37,17 @@ public class InventoryDatabase : ScriptableObject
         return null;
     }
 
+    // Nuevo método para obtener el índice de un item
+    public int GetItemIndex(InventoryItem item)
+    {
+        for (int i = 0; i < items.Length; i++)
+        {
+            if (items[i] == item)
+                return i;
+        }
+        return -1;
+    }
+
     public List<InventoryItem> GetItemsByType(ItemType type)
     {
         List<InventoryItem> foundItems = new List<InventoryItem>();
