@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2ea7546a35a2624480113e17ea51991, type: 3}
   m_Name: Night
   m_EditorClassIdentifier: 
-  currentDay: 3
+  currentDay: 0
   dayZoneConfigurations:
   - day: 0
     zoneStates:
@@ -21,6 +21,18 @@ MonoBehaviour:
     - zoneName: Calle2
       state: 1
   - day: 1
+    zoneStates:
+    - zoneName: Parque
+      state: 0
+    - zoneName: Calle2
+      state: 0
+  - day: 2
+    zoneStates:
+    - zoneName: Parque
+      state: 0
+    - zoneName: Calle2
+      state: 0
+  - day: 3
     zoneStates:
     - zoneName: Parque
       state: 0

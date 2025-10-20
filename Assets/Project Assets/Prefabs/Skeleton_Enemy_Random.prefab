@@ -197,7 +197,7 @@ MonoBehaviour:
     m_Bits: 128
   entityTarget: 0
   maxAttackDuration: 5
-  attackCooldown: 0.5
+  attackCooldown: 1.5
   attackPriority:
     attackPriority: 0
     hasHyperArmor: 0

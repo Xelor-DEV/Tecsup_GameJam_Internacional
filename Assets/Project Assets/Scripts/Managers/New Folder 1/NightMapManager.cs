@@ -23,16 +23,7 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
     {
         InitializeDictionaries();
         ApplyDayZoneStates();
-
-        if (config.currentDay != 0)
-        {
-            InitializeTimer();
-        }
-        else
-        {
-            if (timerText != null)
-                timerText.text = "";
-        }
+        InitializeTimer();
     }
 
     void Update()

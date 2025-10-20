@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System.Linq;
+using UnityEngine.SceneManagement;
 
 public class DayManager : MonoBehaviour
 {
@@ -21,6 +22,7 @@ public class DayManager : MonoBehaviour
 
     void Start()
     {
+        nightMapConfig.currentDay = nightMapConfig.currentDay + 1;
         InitializeDay();
         SpawnDayCharacters();
     }
@@ -132,5 +134,10 @@ public class DayManager : MonoBehaviour
     public RectTransform GetTalkPosition()
     {
         return talkPosition;
+    }
+
+    public void Scene(string scene)
+    {
+        SceneManager.LoadScene(scene);
     }
 }
