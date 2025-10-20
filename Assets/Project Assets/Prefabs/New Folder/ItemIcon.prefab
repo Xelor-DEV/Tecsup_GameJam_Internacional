@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2657517740811349816}
   - component: {fileID: 8193740806644190810}
   - component: {fileID: 6798910647111943146}
-  - component: {fileID: 8026473804126705034}
+  - component: {fileID: 7503262058008699666}
   m_Layer: 5
   m_Name: ItemIcon
   m_TagString: Untagged
@@ -139,7 +139,7 @@ MonoBehaviour:
   pressedScale: 0.9
   scaleDuration: 0.2
   easeType: 27
---- !u!114 &8026473804126705034
+--- !u!114 &7503262058008699666
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -148,11 +148,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1278171134719281766}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2a27dca8fcd5265429a4dda668e6eb83, type: 3}
+  m_Script: {fileID: 11500000, guid: f7738807e890a0b4989ee37245e47fce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemImage: {fileID: 6505878681840153903}
-  itemNameText: {fileID: 0}
+  itemIcon: {fileID: 6505878681840153903}
   itemButton: {fileID: 8193740806644190810}
 --- !u!1 &6760997532010328593
 GameObject:

@@ -116,4 +116,16 @@ public class InventoryDatabase : ScriptableObject
         items = newArray;
         OnInventoryUpdated?.Invoke();
     }
+
+    public void RemoveItem(InventoryItem item)
+    {
+        for (int i = 0; i < ArraySize; i++)
+        {
+            if (GetItem(i) == item)
+            {
+                RemoveItem(i);
+                return;
+            }
+        }
+    }
 }

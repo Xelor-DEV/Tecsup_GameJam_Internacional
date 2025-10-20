@@ -9,12 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c021f6ba66a120c4fb7f7e7402dea628, type: 3}
-  m_Name: Night Inventory
+  m_Script: {fileID: 11500000, guid: 26ededfef8d6303449f25b7fa2e132c0, type: 3}
+  m_Name: Candy
   m_EditorClassIdentifier: 
-  maxSize: 4
-  items:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  amount: 0

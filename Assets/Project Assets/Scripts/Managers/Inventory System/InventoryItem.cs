@@ -1,16 +1,17 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New Item", menuName = "Inventory/Item")]
+[CreateAssetMenu(fileName = "InventoryItem", menuName = "Game/Inventory Item")]
 public class InventoryItem : ScriptableObject
 {
     public string itemName;
     public Sprite icon;
-    public ItemType itemType;
+    public bool isDroppable = true;
+    public int candyValue = 5; // Valor por defecto para objetos vendibles
+    public Clue relatedClue; // Referencia a la pista si es objeto clave
+    public CharacterData targetCharacter; // Personaje que necesita este objeto}
     public GameObject prefab;
-    [Tooltip("Si este objeto puede ser dropeado del inventario")]
-    public bool isDroppable = true; // Nueva variable booleana
+    public ItemType itemType;
 }
-
 public enum ItemType
 {
     Sandals,

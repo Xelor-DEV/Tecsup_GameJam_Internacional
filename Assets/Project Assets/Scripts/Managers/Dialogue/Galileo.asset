@@ -9,12 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c021f6ba66a120c4fb7f7e7402dea628, type: 3}
-  m_Name: Night Inventory
+  m_Script: {fileID: 11500000, guid: 53bcc6c7aa83f9d41bdcb4117b6d634c, type: 3}
+  m_Name: Galileo
   m_EditorClassIdentifier: 
-  maxSize: 4
-  items:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  characterName: Galileo
+  availableDays: 020000000300000004000000
+  isOptional: 0
+  characterPrefab: {fileID: 4722353212694284764, guid: 4a56145481e32384f9fc0cf84209c450, type: 3}
