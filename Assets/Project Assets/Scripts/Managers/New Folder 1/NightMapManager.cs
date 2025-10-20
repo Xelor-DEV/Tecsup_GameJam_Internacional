@@ -94,9 +94,12 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
                 {
                     if (dayZonesDict.TryGetValue(zoneState.zoneName, out ZoneDefinition zone))
                     {
-                        foreach (var collider in zone.colliders)
+                        foreach (var zoneObject in zone.zoneObjects)
                         {
-                            collider.enabled = zoneState.state;
+                            if (zoneObject != null)
+                            {
+                                zoneObject.SetActive(zoneState.state);
+                            }
                         }
                     }
                 }

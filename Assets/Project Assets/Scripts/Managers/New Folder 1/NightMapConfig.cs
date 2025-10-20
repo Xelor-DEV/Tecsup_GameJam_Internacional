@@ -26,7 +26,7 @@ public class DayZoneConfiguration
 public class ZoneDefinition
 {
     public string zoneName;
-    public BoxCollider2D[] colliders;
+    public GameObject[] zoneObjects;
 }
 
 [System.Serializable]
