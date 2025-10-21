@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Clue
   m_EditorClassIdentifier: 
   clueName: test
-  isFound: 1
+  isFound: 0
   description: 
