@@ -7,6 +7,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] Rigidbody2D rb;
     [SerializeField] Animator animator;
     [SerializeField] SpriteRenderer spriteRenderer;
+    [SerializeField] ParticleSystem runParticles;
 
     [Header("X Axis Movement Settings")]
     [SerializeField] private float walkSpeedX = 6f;
@@ -19,7 +20,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float runSpeedY = 6f;
     [SerializeField] private float accelerationY = 20f;
     [SerializeField] private float decelerationY = 25f;
-
     [SerializeField] private float velocityPower = 0.9f;
 
     [Header("Direction Change Settings")]
@@ -56,12 +56,18 @@ public class PlayerMovement : MonoBehaviour
             rb.angularDamping = 0f;
             rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         }
+
+        if (runParticles != null)
+        {
+            runParticles.Stop();
+        }
     }
 
     private void Update()
     {
         UpdateAnimations();
         HandleSpriteFlip();
+        UpdateParticleSystem();
     }
 
     private void FixedUpdate()
@@ -232,6 +238,24 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    private void UpdateParticleSystem()
+    {
+        if (runParticles != null)
+        {
+            bool shouldBeRunning = IsRunning();
+
+            if (shouldBeRunning && !runParticles.isPlaying)
+            {
+                runParticles.Play();
+            }
+            else if (!shouldBeRunning && runParticles.isPlaying)
+            {
+                runParticles.Stop();
+            }
+        }
+    }
+
+
     public void SetMovementEnabled(bool enabled)
     {
         canMove = enabled;
@@ -239,6 +263,11 @@ public class PlayerMovement : MonoBehaviour
         {
             moveInput = Vector2.zero;
             smoothStopVelocity = Vector2.zero;
+
+            if (runParticles != null && runParticles.isPlaying)
+            {
+                runParticles.Stop();
+            }
         }
     }
 
