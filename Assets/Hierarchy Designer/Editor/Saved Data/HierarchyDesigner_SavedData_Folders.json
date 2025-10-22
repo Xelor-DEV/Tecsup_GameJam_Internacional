@@ -107,6 +107,60 @@
                 "a": 1.0
             },
             "ImageType": 0
+        },
+        {
+            "Name": "Calle3",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 1,
+            "ImageColor": {
+                "r": 1.0,
+                "g": 0.5597596168518066,
+                "b": 0.36320751905441286,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "Muelle",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 1,
+            "ImageColor": {
+                "r": 0.31078678369522097,
+                "g": 0.633175790309906,
+                "b": 0.6792452931404114,
+                "a": 1.0
+            },
+            "ImageType": 0
+        },
+        {
+            "Name": "EntradaEdificio",
+            "TextColor": {
+                "r": 1.0,
+                "g": 1.0,
+                "b": 1.0,
+                "a": 1.0
+            },
+            "FontSize": 12,
+            "FontStyle": 1,
+            "ImageColor": {
+                "r": 0.9988637566566467,
+                "g": 1.0,
+                "b": 0.47641509771347048,
+                "a": 1.0
+            },
+            "ImageType": 0
         }
     ]
 }
