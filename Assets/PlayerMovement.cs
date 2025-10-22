@@ -23,8 +23,8 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float velocityPower = 0.9f;
 
     [Header("Direction Change Settings")]
-    [SerializeField] private float directionChangeMultiplier = 2f; // Multiplicador adicional para cambios de dirección
-    [SerializeField] private float directionChangeThreshold = 0.3f; // Umbral para detectar cambio de dirección
+    [SerializeField] private float directionChangeMultiplier = 2f;
+    [SerializeField] private float directionChangeThreshold = 0.3f;
 
     [Header("Smooth Stop Settings")]
     [SerializeField] private float stopSmoothTime = 0.08f;
@@ -33,16 +33,21 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private string isMovingBool = "IsMoving";
     [SerializeField] private string isRunningBool = "IsRunning";
 
+    [Header("Particle Settings")]
+    [SerializeField] private float particleEmissionRate = 20f;
+
     private Vector2 moveInput;
     private bool isRunning = false;
     private Vector2 currentSpeed;
     private bool canMove = true;
 
-    // Variables para control de animaciones
     private bool wasMoving = false;
     private bool wasRunning = false;
     private Vector2 smoothStopVelocity;
-    private Vector2 lastMoveInput; // Para detectar cambios de dirección
+    private Vector2 lastMoveInput;
+
+    private ParticleSystem.EmissionModule emissionModule;
+    private bool particlesShouldBeEmitting = false;
 
     private void Awake()
     {
@@ -59,7 +64,15 @@ public class PlayerMovement : MonoBehaviour
 
         if (runParticles != null)
         {
-            runParticles.Stop();
+            emissionModule = runParticles.emission;
+            // Inicialmente deshabilitamos la emisión
+            emissionModule.enabled = false;
+
+            // Aseguramos que el sistema esté listo para usar
+            if (!runParticles.isPlaying)
+            {
+                runParticles.Play();
+            }
         }
     }
 
@@ -81,7 +94,6 @@ public class PlayerMovement : MonoBehaviour
             ApplyDeceleration();
         }
 
-        // Actualizar lastMoveInput después de procesar el movimiento
         lastMoveInput = moveInput;
     }
 
@@ -112,26 +124,22 @@ public class PlayerMovement : MonoBehaviour
             moveInput.y * currentSpeed.y
         );
 
-        // Si no hay input, aplicar parada suavizada
         if (moveInput.magnitude < 0.1f)
         {
             rb.linearVelocity = Vector2.SmoothDamp(rb.linearVelocity, Vector2.zero, ref smoothStopVelocity, stopSmoothTime);
             return;
         }
 
-        // Detectar cambio de dirección más preciso
         bool isChangingDirectionX = Mathf.Sign(moveInput.x) != Mathf.Sign(lastMoveInput.x) && Mathf.Abs(moveInput.x) > directionChangeThreshold && Mathf.Abs(lastMoveInput.x) > directionChangeThreshold;
         bool isChangingDirectionY = Mathf.Sign(moveInput.y) != Mathf.Sign(lastMoveInput.y) && Mathf.Abs(moveInput.y) > directionChangeThreshold && Mathf.Abs(lastMoveInput.y) > directionChangeThreshold;
 
         Vector2 velocityDifference = targetVelocity - rb.linearVelocity;
 
-        // Aplicar fuerzas con detección mejorada de cambio de dirección
         float movementForceX = CalculateMovementForce(velocityDifference.x, isChangingDirectionX, true);
         float movementForceY = CalculateMovementForce(velocityDifference.y, isChangingDirectionY, false);
 
         rb.AddForce(new Vector2(movementForceX, movementForceY), ForceMode2D.Force);
 
-        // Clamp velocity para mantener límites de velocidad
         ClampVelocity();
     }
 
@@ -144,15 +152,12 @@ public class PlayerMovement : MonoBehaviour
         float accelerationRate = isXAxis ? accelerationX : accelerationY;
         float decelerationRate = isXAxis ? decelerationX : decelerationY;
 
-        // Si estamos cambiando de dirección, aplicar desaceleración extra
         if (isChangingDirection)
         {
             decelerationRate *= directionChangeMultiplier;
-            // Forzar una desaceleración más agresiva durante cambios de dirección
             return Mathf.Sign(velocityDiff) * Mathf.Pow(absVelocityDiff, velocityPower) * decelerationRate;
         }
 
-        // Determinar si debemos acelerar o desacelerar
         bool shouldAccelerate = Mathf.Abs((isXAxis ? moveInput.x : moveInput.y)) > 0.1f;
         float currentAccelerationRate = shouldAccelerate ? accelerationRate : decelerationRate;
 
@@ -163,13 +168,11 @@ public class PlayerMovement : MonoBehaviour
     {
         Vector2 currentVel = rb.linearVelocity;
 
-        // Clamp en eje X
         if (Mathf.Abs(currentVel.x) > currentSpeed.x)
         {
             currentVel.x = Mathf.Sign(currentVel.x) * currentSpeed.x;
         }
 
-        // Clamp en eje Y
         if (Mathf.Abs(currentVel.y) > currentSpeed.y)
         {
             currentVel.y = Mathf.Sign(currentVel.y) * currentSpeed.y;
@@ -242,19 +245,42 @@ public class PlayerMovement : MonoBehaviour
     {
         if (runParticles != null)
         {
-            bool shouldBeRunning = IsRunning();
+            bool newEmissionState = IsRunning();
 
-            if (shouldBeRunning && !runParticles.isPlaying)
+            // Solo cambiar el estado si es diferente al anterior
+            if (newEmissionState != particlesShouldBeEmitting)
             {
-                runParticles.Play();
+                particlesShouldBeEmitting = newEmissionState;
+                emissionModule.enabled = particlesShouldBeEmitting;
+
+                if (particlesShouldBeEmitting)
+                {
+                    // Asegurarse de que el sistema esté reproduciéndose
+                    if (!runParticles.isPlaying)
+                    {
+                        runParticles.Play();
+                    }
+
+                    // Ajustar la tasa de emisión basada en la velocidad
+                    float speedFactor = Mathf.Clamp01(rb.linearVelocity.magnitude / currentSpeed.magnitude);
+                    emissionModule.rateOverTime = particleEmissionRate * speedFactor;
+                }
+                else
+                {
+                    // Cuando se detiene, solo deshabilitamos la emisión
+                    // Las partículas existentes continuarán su ciclo natural
+                    emissionModule.enabled = false;
+                }
             }
-            else if (!shouldBeRunning && runParticles.isPlaying)
+
+            // Si estamos emitiendo, actualizar la tasa basada en la velocidad
+            if (particlesShouldBeEmitting)
             {
-                runParticles.Stop();
+                float speedFactor = Mathf.Clamp01(rb.linearVelocity.magnitude / currentSpeed.magnitude);
+                emissionModule.rateOverTime = particleEmissionRate * speedFactor;
             }
         }
     }
-
 
     public void SetMovementEnabled(bool enabled)
     {
@@ -264,9 +290,10 @@ public class PlayerMovement : MonoBehaviour
             moveInput = Vector2.zero;
             smoothStopVelocity = Vector2.zero;
 
-            if (runParticles != null && runParticles.isPlaying)
+            if (runParticles != null)
             {
-                runParticles.Stop();
+                particlesShouldBeEmitting = false;
+                emissionModule.enabled = false;
             }
         }
     }
@@ -283,7 +310,7 @@ public class PlayerMovement : MonoBehaviour
 
     public bool IsRunning()
     {
-        return isRunning && IsMoving();
+        return isRunning && IsMoving() && rb.linearVelocity.magnitude > 0.5f;
     }
 
     public bool CanMove()

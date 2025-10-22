@@ -2,11 +2,15 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class NightMapManager : NonPersistentSingleton<NightMapManager>
 {
     [Header("Configuration")]
     [SerializeField] private NightMapConfig config;
+    [SerializeField] private string sceneToLoad = "Day"; // String para nombre de escena
+    [SerializeField] private GameObject timerContainer;
 
     [Header("Zones")]
     [SerializeField] private List<ZoneDefinition> dayZones;
@@ -24,6 +28,7 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
         InitializeDictionaries();
         ApplyDayZoneStates();
         InitializeTimer();
+        UpdateTimerDisplay(); // Asegurar que el display esté correcto al inicio
     }
 
     void Update()
@@ -66,7 +71,10 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
         if (config.currentDay == 0)
         {
             if (timerText != null)
-                timerText.text = "";
+            {
+                timerText.text = ""; // Día 0 - texto en blanco
+                timerContainer.SetActive(false);
+            }
             return;
         }
 
@@ -81,7 +89,26 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
     private void OnTimerCompleted()
     {
         Debug.Log("¡Timer completado!");
-        // Lógica cuando el timer termina
+        StartCoroutine(TransitionToDayScene());
+    }
+
+    private IEnumerator TransitionToDayScene()
+    {
+        // Fade de transparente (0) a negro (1)
+        yield return CameraManager.Instance.StartCoroutine(CameraManager.Instance.Fade(0f, 1f));
+
+        // Esperar un momento en negro
+        yield return new WaitForSecondsRealtime(0.5f);
+
+        // Cargar la escena del día
+        if (!string.IsNullOrEmpty(sceneToLoad))
+        {
+            SceneManager.LoadScene(sceneToLoad);
+        }
+        else
+        {
+            Debug.LogError("No se ha especificado el nombre de la escena a cargar");
+        }
     }
 
     private void ApplyDayZoneStates()
@@ -108,8 +135,6 @@ public class NightMapManager : NonPersistentSingleton<NightMapManager>
         }
     }
 }
-
-
 [System.Serializable]
 public class Timer
 {
