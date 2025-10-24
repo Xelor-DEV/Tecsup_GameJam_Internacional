@@ -15,17 +15,42 @@ public class SelectedButtonTween : MonoBehaviour, IPointerEnterHandler, IPointer
     private Tween currentTween;
     private bool isHighlighted = false;
     private Button button;
+    private RectTransform scaleContainer; // Nuevo contenedor para la escala
 
     private void Awake()
     {
-        originalScale = transform.localScale;
         button = GetComponent<Button>();
+        CreateScaleContainer();
+        originalScale = scaleContainer.localScale;
+    }
+
+    private void CreateScaleContainer()
+    {
+        // Crear un objeto hijo para manejar la escala
+        GameObject containerGO = new GameObject("ScaleContainer");
+        scaleContainer = containerGO.AddComponent<RectTransform>();
+        scaleContainer.SetParent(transform);
+
+        // Configurar el contenedor para que ocupe todo el espacio del botón
+        scaleContainer.localPosition = Vector3.zero;
+        scaleContainer.localScale = Vector3.one;
+        scaleContainer.anchorMin = Vector2.zero;
+        scaleContainer.anchorMax = Vector2.one;
+        scaleContainer.offsetMin = Vector2.zero;
+        scaleContainer.offsetMax = Vector2.zero;
+
+        // Mover todos los hijos al nuevo contenedor
+        while (transform.childCount > 0)
+        {
+            Transform child = transform.GetChild(0);
+            child.SetParent(scaleContainer);
+        }
     }
 
     private void OnDisable()
     {
         currentTween?.Kill();
-        transform.localScale = originalScale;
+        scaleContainer.localScale = originalScale;
         isHighlighted = false;
     }
 
@@ -40,7 +65,7 @@ public class SelectedButtonTween : MonoBehaviour, IPointerEnterHandler, IPointer
 
         isHighlighted = true;
         currentTween?.Kill();
-        currentTween = transform.DOScale(originalScale * highlightedScale, scaleDuration).SetEase(easeType);
+        currentTween = scaleContainer.DOScale(originalScale * highlightedScale, scaleDuration).SetEase(easeType);
     }
 
     public void OnPointerExit(PointerEventData eventData)
@@ -49,7 +74,7 @@ public class SelectedButtonTween : MonoBehaviour, IPointerEnterHandler, IPointer
 
         isHighlighted = false;
         currentTween?.Kill();
-        currentTween = transform.DOScale(originalScale, scaleDuration).SetEase(easeType);
+        currentTween = scaleContainer.DOScale(originalScale, scaleDuration).SetEase(easeType);
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -57,7 +82,7 @@ public class SelectedButtonTween : MonoBehaviour, IPointerEnterHandler, IPointer
         if (!IsButtonInteractable()) return;
 
         currentTween?.Kill();
-        currentTween = transform.DOScale(originalScale * pressedScale, scaleDuration * 0.5f).SetEase(Ease.OutQuad);
+        currentTween = scaleContainer.DOScale(originalScale * pressedScale, scaleDuration * 0.5f).SetEase(Ease.OutQuad);
     }
 
     public void OnPointerUp(PointerEventData eventData)
@@ -70,6 +95,6 @@ public class SelectedButtonTween : MonoBehaviour, IPointerEnterHandler, IPointer
             originalScale * highlightedScale :
             originalScale;
 
-        currentTween = transform.DOScale(targetScale, scaleDuration).SetEase(easeType);
+        currentTween = scaleContainer.DOScale(targetScale, scaleDuration).SetEase(easeType);
     }
 }
