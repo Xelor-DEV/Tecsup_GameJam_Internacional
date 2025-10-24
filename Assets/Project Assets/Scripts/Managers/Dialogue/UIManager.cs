@@ -3,6 +3,7 @@ using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : NonPersistentSingleton<UIManager>
 {
@@ -29,6 +30,9 @@ public class UIManager : NonPersistentSingleton<UIManager>
     [SerializeField] private Ease popInEase = Ease.OutBack;
     [SerializeField] private Ease popOutEase = Ease.InBack;
 
+    [Header("Candy UI")]
+    [SerializeField] private TMP_Text candyText;
+
     private CharacterUI currentInteractingCharacter;
     private bool isInteracting = false;
     private List<InventoryItemUIDay> spawnedItemUIs = new List<InventoryItemUIDay>();
@@ -39,6 +43,7 @@ public class UIManager : NonPersistentSingleton<UIManager>
         DeactivateAllPanels();
         SetupButtonListeners();
         ShowMainButtons(); // Mostrar botones principales al inicio
+        UpdateCandyText();
     }
 
     void SetupButtonListeners()
@@ -306,6 +311,7 @@ public class UIManager : NonPersistentSingleton<UIManager>
         if (playerCandy != null)
         {
             playerCandy.AddCandy(item.candyValue);
+            UpdateCandyText();
             Debug.Log($"Item {item.itemName} vendido por {item.candyValue} caramelos. Total: {playerCandy.amount}");
         }
         else
@@ -604,5 +610,13 @@ public class UIManager : NonPersistentSingleton<UIManager>
 
         // Asegurarse de que los botones principales estén visibles
         ShowMainButtons();
+    }
+
+    private void UpdateCandyText()
+    {
+        if (candyText != null && playerCandy != null)
+        {
+            candyText.text = playerCandy.amount.ToString();
+        }
     }
 }

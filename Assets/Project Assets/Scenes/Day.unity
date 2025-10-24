@@ -1604,6 +1604,7 @@ MonoBehaviour:
   popOutDuration: 0.3
   popInEase: 27
   popOutEase: 26
+  candyText: {fileID: 288631431}
 --- !u!1 &369680387
 GameObject:
   m_ObjectHideFlags: 0
