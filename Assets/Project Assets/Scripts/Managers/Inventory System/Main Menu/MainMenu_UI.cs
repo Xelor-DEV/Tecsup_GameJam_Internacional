@@ -58,6 +58,7 @@ public class MainMenu_UI : MonoBehaviour
         if (!isSelectionMenuVisible)
         {
             ShowSelectionMenu();
+            AudioManager.Instance.PlaySfxOneShot(0);
         }
         // Removido el else para que el menú no se oculte una vez mostrado
     }

@@ -7,7 +7,6 @@ public class InventoryItemUIDay : MonoBehaviour
     [Header("UI References")]
     [SerializeField] private Image itemIcon;
     [SerializeField] private Button itemButton;
-    [SerializeField] private GameObject keyItemIndicator;
 
     private InventoryItem itemData;
     private System.Action<InventoryItem> onItemSelected;
@@ -20,18 +19,24 @@ public class InventoryItemUIDay : MonoBehaviour
         if (itemIcon != null)
             itemIcon.sprite = item.icon;
 
-        if (keyItemIndicator != null)
-            keyItemIndicator.SetActive(!item.isDroppable);
-
         if (itemButton != null)
-            itemButton.onClick.AddListener(OnItemClicked);
+        {
+            // Si no hay callback, deshabilitar el botón (modo vista)
+            if (onSelect == null)
+            {
+                itemButton.interactable = false;
+            }
+            else
+            {
+                itemButton.onClick.AddListener(OnItemClicked);
+            }
+        }
 
         // Animación de aparición
         transform.localScale = Vector3.zero;
         transform.DOScale(Vector3.one, 0.3f).SetEase(Ease.OutBack);
     }
 
-    // Nuevo método para obtener los datos del item
     public InventoryItem GetItemData()
     {
         return itemData;

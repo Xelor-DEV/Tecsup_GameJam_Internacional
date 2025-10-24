@@ -24,12 +24,14 @@ public class CharacterUI : MonoBehaviour
     private bool isTalking = false;
     private Vector3 originalScale;
     private Vector3 originalPosition;
+    private Transform originalParent;
 
     void Awake()
     {
         characterRect = GetComponent<RectTransform>();
         originalScale = transform.localScale;
         originalPosition = transform.position;
+        originalParent = transform.parent;
 
         if (characterButton == null)
             characterButton = GetComponentInChildren<Button>();
@@ -67,8 +69,16 @@ public class CharacterUI : MonoBehaviour
 
         Sequence talkSequence = DOTween.Sequence();
 
+        // Primero movemos al personaje a la posición Hide
         talkSequence.Append(characterRect.DOMove(dayManager.GetHidePosition().position, moveDuration).SetEase(moveEase));
-        talkSequence.AppendCallback(() => SetTalkingState());
+
+        // Cuando llega a Hide, lo hacemos hijo del Hide position
+        talkSequence.AppendCallback(() => {
+            transform.SetParent(dayManager.GetHidePosition());
+            SetTalkingState();
+        });
+
+        // Luego lo movemos a Talk position (sin cambiar el parent)
         talkSequence.Append(characterRect.DOMove(dayManager.GetTalkPosition().position, moveDuration).SetEase(moveEase));
         talkSequence.Join(characterRect.DOScale(originalScale * 1.1f, scaleDuration).SetLoops(2, LoopType.Yoyo));
 
@@ -84,8 +94,16 @@ public class CharacterUI : MonoBehaviour
 
         Sequence leaveSequence = DOTween.Sequence();
 
+        // Primero movemos de vuelta a Hide position
         leaveSequence.Append(characterRect.DOMove(dayManager.GetHidePosition().position, moveDuration).SetEase(moveEase));
-        leaveSequence.AppendCallback(() => SetWaitingState());
+
+        // Cuando llega a Hide, quitamos el parent y restauramos el parent original
+        leaveSequence.AppendCallback(() => {
+            transform.SetParent(originalParent);
+            SetWaitingState();
+        });
+
+        // Finalmente movemos a la posición original
         leaveSequence.Append(characterRect.DOMove(originalPosition, moveDuration).SetEase(moveEase));
 
         leaveSequence.OnComplete(() => {

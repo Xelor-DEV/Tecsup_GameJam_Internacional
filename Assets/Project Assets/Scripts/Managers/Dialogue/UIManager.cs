@@ -2,6 +2,7 @@ using UnityEngine;
 using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class UIManager : NonPersistentSingleton<UIManager>
 {
@@ -10,6 +11,12 @@ public class UIManager : NonPersistentSingleton<UIManager>
     [SerializeField] private GameObject selectionsPanel;
     [SerializeField] private GameObject inventorySellPanel;
     [SerializeField] private GameObject inventorySellContent;
+    [SerializeField] private GameObject inventoryViewPanel;
+    [SerializeField] private GameObject inventoryViewContent;
+    [SerializeField] private Button playerInventoryButton;
+    [SerializeField] private Button goToNightButton;
+    [SerializeField] private Button backButtonSell;
+    [SerializeField] private Button backButtonView;
 
     [Header("Inventory System")]
     [SerializeField] private InventoryDatabase dayInventory;
@@ -25,11 +32,30 @@ public class UIManager : NonPersistentSingleton<UIManager>
     private CharacterUI currentInteractingCharacter;
     private bool isInteracting = false;
     private List<InventoryItemUIDay> spawnedItemUIs = new List<InventoryItemUIDay>();
-
+    private List<InventoryItemUIDay> spawnedViewItemUIs = new List<InventoryItemUIDay>();
 
     void Start()
     {
         DeactivateAllPanels();
+        SetupButtonListeners();
+        ShowMainButtons(); // Mostrar botones principales al inicio
+    }
+
+    void SetupButtonListeners()
+    {
+        // Configurar listeners de los nuevos botones
+        if (playerInventoryButton != null)
+            playerInventoryButton.onClick.AddListener(OnPlayerInventoryClicked);
+
+        if (goToNightButton != null)
+            goToNightButton.onClick.AddListener(OnGoToNightClicked);
+
+        // Configurar botones de back
+        if (backButtonSell != null)
+            backButtonSell.onClick.AddListener(OnBackButtonClicked);
+
+        if (backButtonView != null)
+            backButtonView.onClick.AddListener(OnBackButtonClicked);
     }
 
     void DeactivateAllPanels()
@@ -37,7 +63,10 @@ public class UIManager : NonPersistentSingleton<UIManager>
         if (selectionsPanel != null) selectionsPanel.SetActive(false);
         if (inventorySellPanel != null) inventorySellPanel.SetActive(false);
         if (inventorySellContent != null) inventorySellContent.SetActive(false);
+        if (inventoryViewPanel != null) inventoryViewPanel.SetActive(false);
+        if (inventoryViewContent != null) inventoryViewContent.SetActive(false);
     }
+
 
     public bool CanInteractWithCharacter()
     {
@@ -61,6 +90,8 @@ public class UIManager : NonPersistentSingleton<UIManager>
         isInteracting = true;
         currentInteractingCharacter = character;
 
+        HideMainButtons();
+
         // Debug para verificar el personaje actual
         CharacterData charData = character.GetCharacterData();
         Debug.Log($"Iniciando interacción con: {(charData != null ? charData.characterName : "CHARACTER DATA NULL")}");
@@ -80,8 +111,49 @@ public class UIManager : NonPersistentSingleton<UIManager>
         currentInteractingCharacter = null;
         HideSelectionsPanel();
         HideInventorySellPanel();
+        HideInventoryViewPanel();
         ClearInventoryItems();
+
+        // Mostrar botones principales al finalizar interacción
+        ShowMainButtons();
     }
+    #region Main Buttons Management
+
+    private void ShowMainButtons()
+    {
+        if (playerInventoryButton != null)
+        {
+            playerInventoryButton.gameObject.SetActive(true);
+            playerInventoryButton.transform.localScale = Vector3.zero;
+            playerInventoryButton.transform.DOScale(Vector3.one, popInDuration).SetEase(popInEase);
+        }
+
+        if (goToNightButton != null)
+        {
+            goToNightButton.gameObject.SetActive(true);
+            goToNightButton.transform.localScale = Vector3.zero;
+            goToNightButton.transform.DOScale(Vector3.one, popInDuration).SetEase(popInEase);
+        }
+    }
+
+    private void HideMainButtons()
+    {
+        if (playerInventoryButton != null)
+        {
+            playerInventoryButton.transform.DOScale(Vector3.zero, popOutDuration)
+                .SetEase(popOutEase)
+                .OnComplete(() => playerInventoryButton.gameObject.SetActive(false));
+        }
+
+        if (goToNightButton != null)
+        {
+            goToNightButton.transform.DOScale(Vector3.zero, popOutDuration)
+                .SetEase(popOutEase)
+                .OnComplete(() => goToNightButton.gameObject.SetActive(false));
+        }
+    }
+
+    #endregion
 
     #region Inventory Management
 
@@ -109,7 +181,6 @@ public class UIManager : NonPersistentSingleton<UIManager>
 
         Debug.Log($"=== POBLANDO INVENTARIO ===");
 
-        // Obtener todos los items del inventario
         for (int i = 0; i < dayInventory.ArraySize; i++)
         {
             InventoryItem item = dayInventory.GetItem(i);
@@ -139,6 +210,37 @@ public class UIManager : NonPersistentSingleton<UIManager>
         Debug.Log($"=============================");
     }
 
+    private void PopulateInventoryView()
+    {
+        if (dayInventory == null || inventoryItemUIPrefab == null || inventoryViewContent == null)
+        {
+            Debug.LogError("Referencias faltantes en PopulateInventoryView");
+            return;
+        }
+
+        ClearInventoryViewItems();
+
+        Debug.Log("=== POBLANDO VISTA DE INVENTARIO ===");
+
+        for (int i = 0; i < dayInventory.ArraySize; i++)
+        {
+            InventoryItem item = dayInventory.GetItem(i);
+            if (item != null)
+            {
+                GameObject itemUIObject = Instantiate(inventoryItemUIPrefab, inventoryViewContent.transform);
+                InventoryItemUIDay itemUI = itemUIObject.GetComponent<InventoryItemUIDay>();
+                if (itemUI != null)
+                {
+                    // En el modo vista, no pasamos callback o pasamos null para deshabilitar interacciones
+                    itemUI.Initialize(item, null);
+                    spawnedViewItemUIs.Add(itemUI);
+                }
+            }
+        }
+
+        Debug.Log($"Se cargaron {spawnedViewItemUIs.Count} items en la vista de inventario");
+    }
+
     private void ClearInventoryItems()
     {
         foreach (InventoryItemUIDay itemUI in spawnedItemUIs)
@@ -147,6 +249,16 @@ public class UIManager : NonPersistentSingleton<UIManager>
                 Destroy(itemUI.gameObject);
         }
         spawnedItemUIs.Clear();
+    }
+
+    private void ClearInventoryViewItems()
+    {
+        foreach (InventoryItemUIDay itemUI in spawnedViewItemUIs)
+        {
+            if (itemUI != null)
+                Destroy(itemUI.gameObject);
+        }
+        spawnedViewItemUIs.Clear();
     }
 
     private void OnInventoryItemSelected(InventoryItem selectedItem)
@@ -161,15 +273,14 @@ public class UIManager : NonPersistentSingleton<UIManager>
 
         if (selectedItem.isDroppable)
         {
-            // Vender objeto normal
             SellItem(selectedItem);
         }
         else
         {
-            // Intentar dar objeto clave al personaje
             GiveKeyItemToCharacter(selectedItem);
         }
     }
+
     private void SellItem(InventoryItem item)
     {
         if (item == null)
@@ -369,6 +480,57 @@ public class UIManager : NonPersistentSingleton<UIManager>
             .OnComplete(() => inventorySellPanel.SetActive(false));
     }
 
+    public void ShowInventoryViewPanel()
+    {
+        if (inventoryViewPanel == null) return;
+
+        StartCoroutine(ShowInventoryViewAfterDelay(0.2f));
+    }
+
+    private IEnumerator ShowInventoryViewAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+
+        PopulateInventoryView();
+
+        inventoryViewPanel.SetActive(true);
+        inventoryViewPanel.transform.localScale = Vector3.zero;
+        inventoryViewPanel.transform.DOScale(Vector3.one, popInDuration).SetEase(popInEase);
+
+        if (inventoryViewContent != null)
+        {
+            yield return new WaitForSeconds(0.1f);
+            inventoryViewContent.SetActive(true);
+            inventoryViewContent.transform.localScale = Vector3.zero;
+            inventoryViewContent.transform.DOScale(Vector3.one, popInDuration * 0.8f).SetEase(popInEase);
+        }
+    }
+
+    public void HideInventoryViewPanel()
+    {
+        if (inventoryViewPanel == null) return;
+
+        if (inventoryViewContent != null)
+        {
+            inventoryViewContent.transform.DOScale(Vector3.zero, popOutDuration * 0.8f)
+                .SetEase(popOutEase)
+                .OnComplete(() => inventoryViewContent.SetActive(false));
+        }
+
+        inventoryViewPanel.transform.DOScale(Vector3.zero, popOutDuration)
+            .SetEase(popOutEase)
+            .OnComplete(() => {
+                inventoryViewPanel.SetActive(false);
+
+                // Mostrar botones principales si no hay interacción activa
+                if (!isInteracting)
+                {
+                    ShowMainButtons();
+                }
+            });
+    }
+
+
     #endregion
 
     #region Button Handlers
@@ -376,6 +538,36 @@ public class UIManager : NonPersistentSingleton<UIManager>
     public void OnSellButtonClicked()
     {
         ShowInventorySellPanel();
+    }
+
+    public void OnPlayerInventoryClicked()
+    {
+        HideMainButtons();
+        ShowInventoryViewPanel();
+    }
+
+    public void OnGoToNightClicked()
+    {
+        // Aquí iría la lógica para transicionar a la noche
+        Debug.Log("Transicionando a la noche...");
+    }
+
+    public void OnBackButtonClicked()
+    {
+        // Determinar qué panel está activo y cerrarlo
+        if (inventorySellPanel != null && inventorySellPanel.activeSelf)
+        {
+            HideInventorySellPanel();
+            ShowSelectionsPanel();
+        }
+        else if (inventoryViewPanel != null && inventoryViewPanel.activeSelf)
+        {
+            HideInventoryViewPanel();
+            if (!isInteracting)
+            {
+                ShowMainButtons();
+            }
+        }
     }
 
     public void OnLeaveButtonClicked()
@@ -387,6 +579,7 @@ public class UIManager : NonPersistentSingleton<UIManager>
     {
         HideSelectionsPanel();
         HideInventorySellPanel();
+        HideInventoryViewPanel();
 
         yield return new WaitForSeconds(0.5f);
 
@@ -405,7 +598,11 @@ public class UIManager : NonPersistentSingleton<UIManager>
         StopAllCoroutines();
         DeactivateAllPanels();
         ClearInventoryItems();
+        ClearInventoryViewItems();
         isInteracting = false;
         currentInteractingCharacter = null;
+
+        // Asegurarse de que los botones principales estén visibles
+        ShowMainButtons();
     }
 }
