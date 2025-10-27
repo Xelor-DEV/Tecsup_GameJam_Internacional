@@ -283,7 +283,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 79}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1824865887970424979
@@ -377,9 +377,8 @@ MonoBehaviour:
   characterData: {fileID: 11400000, guid: d9de0b0b3085e6a43b52a63621faf928, type: 2}
   waitingState: {fileID: 2106518097345108184}
   talkingState: {fileID: 8068550412076255000}
-  moveDuration: 1
-  moveEase: 10
-  scaleDuration: 0.5
+  jawTransform: {fileID: 2677587141560902610}
+  eyeTransform: {fileID: 0}
   characterButton: {fileID: 5625427106397491723}
 --- !u!1 &8068550412076255000
 GameObject:

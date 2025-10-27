@@ -128,6 +128,10 @@ MonoBehaviour:
   moveDuration: 1
   moveEase: 10
   scaleDuration: 0.5
+  jawTransform: {fileID: 7169122067397017504}
+  jawMovementAmount: 25
+  eyeTransform: {fileID: 0}
+  eyeScaleAmount: 1.2
   characterButton: {fileID: 2292797968277261059}
 --- !u!1 &7309504803728851985
 GameObject:

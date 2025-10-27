@@ -1555,7 +1555,7 @@ GameObject:
   - component: {fileID: 352449612}
   - component: {fileID: 352449613}
   m_Layer: 0
-  m_Name: GameObject (1)
+  m_Name: UI Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1605,6 +1605,7 @@ MonoBehaviour:
   popInEase: 27
   popOutEase: 26
   candyText: {fileID: 288631431}
+  dialogueSystem: {fileID: 1721321597}
 --- !u!1 &369680387
 GameObject:
   m_ObjectHideFlags: 0
@@ -1778,7 +1779,7 @@ GameObject:
   - component: {fileID: 386817137}
   - component: {fileID: 386817138}
   m_Layer: 0
-  m_Name: GameObject
+  m_Name: Day Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3062,7 +3063,7 @@ GameObject:
   - component: {fileID: 1159319251}
   - component: {fileID: 1159319252}
   m_Layer: 0
-  m_Name: GameObject (2)
+  m_Name: Global Scene Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3272,6 +3273,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: AudioManager, Assembly-CSharp
         m_MethodName: PlaySfxOneShot
         m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1721321596}
+        m_TargetAssemblyTypeName: DialogueUI, Assembly-CSharp
+        m_MethodName: OnNextDialogue
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -3789,7 +3802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3107617386164194419, guid: 443cd17f013b15442a9848c2768b5a3b, type: 3}
       propertyPath: sfxClips.Array.size
-      value: 1
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 3107617386164194419, guid: 443cd17f013b15442a9848c2768b5a3b, type: 3}
       propertyPath: musicClips.Array.size
@@ -3799,6 +3812,14 @@ PrefabInstance:
       propertyPath: 'sfxClips.Array.data[0]'
       value: 
       objectReference: {fileID: 8300000, guid: 6cda416cf34d9254cb9707b3c3bef3ef, type: 3}
+    - target: {fileID: 3107617386164194419, guid: 443cd17f013b15442a9848c2768b5a3b, type: 3}
+      propertyPath: 'sfxClips.Array.data[1]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
+    - target: {fileID: 3107617386164194419, guid: 443cd17f013b15442a9848c2768b5a3b, type: 3}
+      propertyPath: 'sfxClips.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
     - target: {fileID: 3107617386164194419, guid: 443cd17f013b15442a9848c2768b5a3b, type: 3}
       propertyPath: 'musicClips.Array.data[0]'
       value: 
@@ -4063,11 +4084,11 @@ MonoBehaviour:
     m_SelectOnRight: {fileID: 0}
   m_Transition: 1
   m_Colors:
-    m_NormalColor: {r: 0.49019608, g: 1, b: 0.45882353, a: 1}
+    m_NormalColor: {r: 0.49019608, g: 1, b: 0.45882353, a: 0.53333336}
     m_HighlightedColor: {r: 1, g: 0.95686275, b: 0.27058825, a: 1}
     m_PressedColor: {r: 0.6698113, g: 0.63019884, b: 0, a: 1}
     m_SelectedColor: {r: 1, g: 0.95686275, b: 0.27058825, a: 1}
-    m_DisabledColor: {r: 0.4811321, g: 0.45871785, b: 0.102127105, a: 0.5019608}
+    m_DisabledColor: {r: 0.4811321, g: 0.45871785, b: 0.102127105, a: 0.2784314}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
   m_SpriteState:
@@ -4098,6 +4119,93 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1721321596}
+        m_TargetAssemblyTypeName: DialogueUI, Assembly-CSharp
+        m_MethodName: OnNextDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!1 &1721321594
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1721321595}
+  - component: {fileID: 1721321597}
+  - component: {fileID: 1721321596}
+  m_Layer: 0
+  m_Name: Dialogue System
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1721321595
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721321594}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 336.07962, y: 90.6032, z: 0.48565567}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1721321596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721321594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1278a48670145944687654acb4d572ae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerDialogPanel: {fileID: 1260822477}
+  playerDialogText: {fileID: 313684855}
+  npcDialogPanel: {fileID: 539112199}
+  npcDialogText: {fileID: 62600646}
+  npcNameText: {fileID: 195172145}
+  popInDuration: 0.3
+  popOutDuration: 0.2
+  popInEase: 27
+  popOutEase: 26
+  charsPerSecond: 30
+  punctuationDelay: 0.5
+  voiceSoundDelay: 0.08
+--- !u!114 &1721321597
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1721321594}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c44e29ad0fa6e29418eab37323e4f9ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueUI: {fileID: 1721321596}
+  charactersDatabase: {fileID: 11400000, guid: 01356cc5b9fbc9a499d931d79d3c9e4f, type: 2}
+  audioManager: {fileID: 1928128863}
+  playerVoiceSound: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
+  playerVoicePitch: 0.9
+  playerVoiceDelay: 0.06
 --- !u!1 &1750629377
 GameObject:
   m_ObjectHideFlags: 0
@@ -5082,6 +5190,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 352449613}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: OnSpeakButtonClicked
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1981297204
 GameObject:
   m_ObjectHideFlags: 0
@@ -5516,3 +5636,4 @@ SceneRoots:
   - {fileID: 386817137}
   - {fileID: 352449612}
   - {fileID: 1159319251}
+  - {fileID: 1721321595}

@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 53bcc6c7aa83f9d41bdcb4117b6d634c, type: 3}
-  m_Name: Galileo
+  m_Name: CharacterData
   m_EditorClassIdentifier: 
-  characterName: Galileo
-  availableDays: 020000000300000004000000
+  characterName: 
+  availableDays: 
   isOptional: 0
-  characterPrefab: {fileID: 4722353212694284764, guid: 4a56145481e32384f9fc0cf84209c450, type: 3}
-  dialogueData: {fileID: 11400000, guid: 312a7e5e1d05f9342b925000e69f4fd3, type: 2}
-  voicePitch: 0.6
-  voiceSound: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
+  characterPrefab: {fileID: 0}
+  dialogueData: {fileID: 0}
+  voicePitch: 1
+  voiceSound: {fileID: 0}
   useJawMovement: 1
-  useScaleEffect: 1
+  useScaleEffect: 0
   useEyeScaleEffect: 0
-  jawMovementAmount: 60
+  jawMovementAmount: 0.3
   animationSpeed: 0.8
   eyeScaleAmount: 1.5

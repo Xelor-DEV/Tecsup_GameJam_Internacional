@@ -17,6 +17,6 @@ MonoBehaviour:
   isDroppable: 0
   candyValue: 5
   relatedClue: {fileID: 11400000, guid: d4ae9ce183140f8408259c4173028c40, type: 2}
-  targetCharacter: {fileID: 11400000, guid: 17efd6d86f76ef042a76d7626776e1f0, type: 2}
+  targetCharacter: {fileID: 11400000, guid: 276b9fd83f97dd04fad53617598ea057, type: 2}
   prefab: {fileID: 8677370741149500423, guid: c03e93828a928044b816392b6028b336, type: 3}
   itemType: 3

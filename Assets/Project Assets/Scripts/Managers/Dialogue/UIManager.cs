@@ -33,6 +33,9 @@ public class UIManager : NonPersistentSingleton<UIManager>
     [Header("Candy UI")]
     [SerializeField] private TMP_Text candyText;
 
+    [Header("Dialogue System")]
+    [SerializeField] private DialogueSystem dialogueSystem;
+
     private CharacterUI currentInteractingCharacter;
     private bool isInteracting = false;
     private List<InventoryItemUIDay> spawnedItemUIs = new List<InventoryItemUIDay>();
@@ -328,7 +331,34 @@ public class UIManager : NonPersistentSingleton<UIManager>
         {
             Debug.LogError("dayInventory es null");
         }
+
+        // Ocultar el panel de venta inmediatamente después de vender
+        HideInventorySellPanel();
+
+        if (isInteracting && currentInteractingCharacter != null)
+        {
+            CharacterData charData = currentInteractingCharacter.GetCharacterData();
+            if (dialogueSystem != null && charData != null)
+            {
+                dialogueSystem.StartDialogueSequence(charData.characterName, "SellItem", () =>
+                {
+                    // Return to sell inventory after dialogue
+                    ShowInventorySellPanel();
+                });
+            }
+            else
+            {
+                // If no dialogue system, show inventory immediately
+                ShowInventorySellPanel();
+            }
+        }
+        else
+        {
+            // If not interacting with character, show inventory immediately
+            ShowInventorySellPanel();
+        }
     }
+
     private void GiveKeyItemToCharacter(InventoryItem keyItem)
     {
         // Verificaciones exhaustivas de null
@@ -353,6 +383,9 @@ public class UIManager : NonPersistentSingleton<UIManager>
             return;
         }
 
+        // Ocultar el panel de venta inmediatamente
+        HideInventorySellPanel();
+
         // Debug detallado para verificar las asignaciones
         Debug.Log($"=== VERIFICACIÓN DE ASIGNACIONES ===");
         Debug.Log($"Item: {keyItem.itemName}");
@@ -363,57 +396,65 @@ public class UIManager : NonPersistentSingleton<UIManager>
 
         if (keyItem.targetCharacter != null && keyItem.targetCharacter == characterData)
         {
-            // Personaje correcto - dar pista
-            if (keyItem.relatedClue != null)
+            // Personaje correcto
+            if (dialogueSystem != null)
             {
-                keyItem.relatedClue.MarkAsFound();
-                Debug.Log($"¡Pista '{keyItem.relatedClue.clueName}' obtenida!");
+                dialogueSystem.StartDialogueSequence(characterData.characterName, "CorrectItem", () =>
+                {
+                    // Continue with the original flow after dialogue
+                    CompleteKeyItemGive(keyItem);
+                });
             }
             else
             {
-                Debug.LogWarning($"El item {keyItem.itemName} no tiene una pista relacionada asignada");
+                CompleteKeyItemGive(keyItem);
             }
-
-            // Encontrar y eliminar el UI del item correcto
-            InventoryItemUIDay itemUI = spawnedItemUIs.Find(ui => ui != null && ui.GetItemData() == keyItem);
-            if (itemUI != null)
-            {
-                itemUI.AnimateSold();
-                spawnedItemUIs.Remove(itemUI);
-            }
-            else
-            {
-                Debug.LogWarning($"No se encontró el UI para el item {keyItem.itemName}");
-            }
-
-            // Remover item del inventario
-            if (dayInventory != null)
-            {
-                dayInventory.RemoveItem(keyItem);
-                Debug.Log($"Item {keyItem.itemName} removido del inventario");
-            }
-            else
-            {
-                Debug.LogError("dayInventory es null");
-            }
-
-            // Cerrar interacción después de éxito
-            StartCoroutine(CompleteInteractionAfterDelay(1.5f));
         }
         else
         {
-            // Personaje incorrecto - activar leave
-            if (keyItem.targetCharacter == null)
+            // Personaje incorrecto
+            if (dialogueSystem != null)
             {
-                Debug.Log($"El item {keyItem.itemName} no tiene un targetCharacter asignado");
+                dialogueSystem.StartDialogueSequence(characterData.characterName, "WrongItem", () =>
+                {
+                    // Return to sell inventory after wrong item dialogue
+                    ShowInventorySellPanel();
+                });
             }
             else
             {
-                Debug.Log($"Este personaje ({characterData.characterName}) no necesita este objeto. El objeto es para: {keyItem.targetCharacter.characterName}");
+                OnLeaveButtonClicked();
             }
-            OnLeaveButtonClicked();
         }
     }
+
+    private void CompleteKeyItemGive(InventoryItem keyItem)
+    {
+        // Ocultar el panel de venta antes de procesar
+        HideInventorySellPanel();
+
+        // Original logic for completing key item give
+        if (keyItem.relatedClue != null)
+        {
+            keyItem.relatedClue.MarkAsFound();
+        }
+
+        InventoryItemUIDay itemUI = spawnedItemUIs.Find(ui => ui != null && ui.GetItemData() == keyItem);
+        if (itemUI != null)
+        {
+            itemUI.AnimateSold();
+            spawnedItemUIs.Remove(itemUI);
+        }
+
+        if (dayInventory != null)
+        {
+            dayInventory.RemoveItem(keyItem);
+        }
+
+        // Return to sell inventory
+        ShowInventorySellPanel();
+    }
+
     private IEnumerator CompleteInteractionAfterDelay(float delay)
     {
         yield return new WaitForSeconds(delay);
@@ -445,6 +486,9 @@ public class UIManager : NonPersistentSingleton<UIManager>
     public void ShowInventorySellPanel()
     {
         if (inventorySellPanel == null) return;
+
+        // Evitar mostrar si ya está activo
+        if (inventorySellPanel.activeSelf) return;
 
         HideSelectionsPanel();
         StartCoroutine(ShowInventoryAfterDelay(0.2f));
@@ -587,6 +631,23 @@ public class UIManager : NonPersistentSingleton<UIManager>
         HideInventorySellPanel();
         HideInventoryViewPanel();
 
+        // Show leave dialogue before actually leaving
+        if (currentInteractingCharacter != null && dialogueSystem != null)
+        {
+            CharacterData charData = currentInteractingCharacter.GetCharacterData();
+            if (charData != null)
+            {
+                bool dialogueCompleted = false;
+                dialogueSystem.StartDialogueSequence(charData.characterName, "Leave", () =>
+                {
+                    dialogueCompleted = true;
+                });
+
+                // Wait for dialogue to complete
+                yield return new WaitUntil(() => dialogueCompleted);
+            }
+        }
+
         yield return new WaitForSeconds(0.5f);
 
         if (currentInteractingCharacter != null)
@@ -595,6 +656,28 @@ public class UIManager : NonPersistentSingleton<UIManager>
         }
 
         EndCharacterInteraction();
+    }
+    public void OnSpeakButtonClicked()
+    {
+        HideSelectionsPanel();
+
+        if (currentInteractingCharacter != null)
+        {
+            CharacterData charData = currentInteractingCharacter.GetCharacterData();
+            if (dialogueSystem != null && charData != null)
+            {
+                dialogueSystem.StartDialogueSequence(charData.characterName, "Speak", () =>
+                {
+                    // After speak dialogue completes, show selections panel again
+                    ShowSelectionsPanel();
+                });
+            }
+            else
+            {
+                // Fallback if no dialogue system
+                ShowSelectionsPanel();
+            }
+        }
     }
 
     #endregion
@@ -618,5 +701,10 @@ public class UIManager : NonPersistentSingleton<UIManager>
         {
             candyText.text = playerCandy.amount.ToString();
         }
+    }
+
+    public CharacterUI GetCurrentInteractingCharacter()
+    {
+        return currentInteractingCharacter;
     }
 }

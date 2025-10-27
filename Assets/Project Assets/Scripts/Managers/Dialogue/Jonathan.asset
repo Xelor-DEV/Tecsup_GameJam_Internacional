@@ -16,3 +16,12 @@ MonoBehaviour:
   availableDays: 01000000020000000300000004000000
   isOptional: 0
   characterPrefab: {fileID: 2205288497265585014, guid: e64cb35cb86d5d24ab9237700de159da, type: 3}
+  dialogueData: {fileID: 11400000, guid: db255f1f1760a434594734417396bc52, type: 2}
+  voicePitch: 1.2
+  voiceSound: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
+  useJawMovement: 0
+  useScaleEffect: 1
+  useEyeScaleEffect: 1
+  jawMovementAmount: 1
+  animationSpeed: 0.8
+  eyeScaleAmount: 1.6

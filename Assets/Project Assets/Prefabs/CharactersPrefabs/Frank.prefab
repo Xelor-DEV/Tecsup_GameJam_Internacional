@@ -489,7 +489,6 @@ MonoBehaviour:
   characterData: {fileID: 11400000, guid: 276b9fd83f97dd04fad53617598ea057, type: 2}
   waitingState: {fileID: 4724768319088102990}
   talkingState: {fileID: 986479368069771992}
-  moveDuration: 1
-  moveEase: 10
-  scaleDuration: 0.5
+  jawTransform: {fileID: 1486451197252690045}
+  eyeTransform: {fileID: 0}
   characterButton: {fileID: 6981293000092555434}

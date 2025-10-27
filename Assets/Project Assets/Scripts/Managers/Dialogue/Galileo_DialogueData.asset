@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bf9b3843739b4aae753b920ec9aba, type: 3}
+  m_Name: Galileo_DialogueData
+  m_EditorClassIdentifier: 
+  speakDialogue:
+  - isPlayerSpeaking: 0
+    dialogueText: "I'm looking for The Art of War by Poseidon. They say it's deep\u2026
+      just like me."
+  leaveDialogue:
+  - isPlayerSpeaking: 0
+    dialogueText: I dive into the darkness, see you later.
+  wrongItemDialogue:
+  - isPlayerSpeaking: 0
+    dialogueText: Maybe too deep for me.
+  correctItemDialogue:
+  - isPlayerSpeaking: 0
+    dialogueText: "That ghost had a stained towel\u2026 spirits don\u2019t use bath
+      textiles\u2026 or do they?"
+  sellItemDialogue:
+  - isPlayerSpeaking: 0
+    dialogueText: "Good \n"
