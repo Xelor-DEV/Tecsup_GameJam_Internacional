@@ -4185,9 +4185,9 @@ MonoBehaviour:
   popOutDuration: 0.2
   popInEase: 27
   popOutEase: 26
-  charsPerSecond: 30
-  punctuationDelay: 0.5
-  voiceSoundDelay: 0.08
+  charsPerSecond: 35
+  punctuationDelay: 0.1
+  voiceSoundDelay: 0.05
 --- !u!114 &1721321597
 MonoBehaviour:
   m_ObjectHideFlags: 0

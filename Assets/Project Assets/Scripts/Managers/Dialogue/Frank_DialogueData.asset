@@ -14,8 +14,28 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speakDialogue:
   - isPlayerSpeaking: 0
-    dialogueText: My girlfriend says that without petals, there's no romance... What
-      could she mean?
+    dialogueText: "Eh\u2026 hola, Marcois. No te molesto, \xBFverdad?"
+  - isPlayerSpeaking: 1
+    dialogueText: "Frank, querido. Si molestar fuera delito, t\xFA tendr\xEDas cadena
+      perpetua.\n(le hace una se\xF1a para pasar)\n\xBFQu\xE9 te trae por mi humilde
+      ruina financiera esta vez?"
+  - isPlayerSpeaking: 0
+    dialogueText: "Mi novia... ya sabes, Lupita. Dice que nunca le llevo nada bonito.\nAs\xED
+      que pens\xE9 en traerle\u2026 flores. De esas que no muerden."
+  - isPlayerSpeaking: 1
+    dialogueText: "Ah, el romance... ese viejo error evolutivo.\nD\xE9jame adivinar:
+      quieres un ramo que huela bien y no se desintegre con la luna llena."
+  - isPlayerSpeaking: 0
+    dialogueText: "S\xED, exacto. Es que la \xFAltima vez le llev\xE9 flores de cementerio\u2026
+      y bueno, las ra\xEDces todav\xEDa gritaban."
+  - isPlayerSpeaking: 1
+    dialogueText: "Encantador detalle.\n(abre un cuaderno lleno de polvo)\nVeamos\u2026
+      flores, flores\u2026 ah, aqu\xED est\xE1. Tengo unas \u201CMargaritas de Medianoche\u201D,
+      reci\xE9n robadas de un jard\xEDn infantil.\nEso s\xED, el env\xEDo cuesta
+      m\xE1s que tu IQ."
+  - isPlayerSpeaking: 0
+    dialogueText: "Oye\u2026 no es muy rom\xE1ntico eso de decirle que vienen de
+      un jard\xEDn infantil.."
   leaveDialogue:
   - isPlayerSpeaking: 1
     dialogueText: Very well. I believe our business here has concluded. My patience
