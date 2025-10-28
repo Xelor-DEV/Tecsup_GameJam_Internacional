@@ -22,6 +22,6 @@ MonoBehaviour:
   useJawMovement: 1
   useScaleEffect: 0
   useEyeScaleEffect: 0
-  jawMovementAmount: 0.3
+  jawMovementAmount: 1
   animationSpeed: 0.8
   eyeScaleAmount: 1.5

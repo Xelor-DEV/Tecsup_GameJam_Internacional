@@ -1597,6 +1597,7 @@ MonoBehaviour:
   goToNightButton: {fileID: 1807933780}
   backButtonSell: {fileID: 278706048}
   backButtonView: {fileID: 1865382340}
+  sellButton: {fileID: 2111893747}
   dayInventory: {fileID: 11400000, guid: dce235df4ca4e404db3e8edc0d4aeba0, type: 2}
   playerCandy: {fileID: 11400000, guid: a381ce3c5602374479a2c913c7f6aa0b, type: 2}
   inventoryItemUIPrefab: {fileID: 1278171134719281766, guid: a711e3198f8f2f0499331e47ff4e3a9d, type: 3}

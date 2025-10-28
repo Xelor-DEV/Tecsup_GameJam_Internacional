@@ -1,7 +1,8 @@
-using UnityEngine;
-using System.Collections;
 using DG.Tweening;
 using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
 
 public class DialogueSystem : NonPersistentSingleton<DialogueSystem>
 {
@@ -24,6 +25,8 @@ public class DialogueSystem : NonPersistentSingleton<DialogueSystem>
     private bool isDialogueActive = false;
     private bool isPaused = false;
     private float lastSoundTime = 0f;
+
+    private Dictionary<string, int> characterSpeakIndices = new Dictionary<string, int>();
 
     public void StartDialogueSequence(string characterName, string dialogueType, Action onComplete = null)
     {
@@ -49,7 +52,27 @@ public class DialogueSystem : NonPersistentSingleton<DialogueSystem>
         switch (dialogueType)
         {
             case "Speak":
-                currentDialogueSequence = characterDialogueData.speakDialogue;
+                // Obtener la secuencia actual basada en el índice
+                if (characterDialogueData.speakDialogue != null &&
+                    characterDialogueData.speakDialogue.Length > 0)
+                {
+                    // Inicializar o obtener el índice para este personaje
+                    if (!characterSpeakIndices.ContainsKey(characterName))
+                    {
+                        characterSpeakIndices[characterName] = 0;
+                    }
+
+                    int currentSpeakIndex = characterSpeakIndices[characterName];
+                    currentDialogueSequence = characterDialogueData.speakDialogue[currentSpeakIndex].lines;
+
+                    // Incrementar el índice para la próxima vez (cíclico)
+                    characterSpeakIndices[characterName] =
+                        (currentSpeakIndex + 1) % characterDialogueData.speakDialogue.Length;
+                }
+                else
+                {
+                    currentDialogueSequence = null;
+                }
                 break;
             case "Leave":
                 currentDialogueSequence = characterDialogueData.leaveDialogue;

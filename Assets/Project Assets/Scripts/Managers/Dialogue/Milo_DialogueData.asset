@@ -1,0 +1,84 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef4bf9b3843739b4aae753b920ec9aba, type: 3}
+  m_Name: Milo_DialogueData
+  m_EditorClassIdentifier: 
+  speakDialogue:
+  - lines:
+    - isPlayerSpeaking: 1
+      dialogueText: Oh look, a towel pretending to be sentient. I must be dreaming.
+    - isPlayerSpeaking: 0
+      dialogueText: Shhh... I am the spirit that wanders between worlds.
+    - isPlayerSpeaking: 1
+      dialogueText: "And you\u2019re wandering all over my carpet. Spirits don\u2019t
+        usually leave wet footprints."
+    - isPlayerSpeaking: 0
+      dialogueText: "That\u2019s\u2026 ectoplasm. Probably."
+  - lines:
+    - isPlayerSpeaking: 1
+      dialogueText: "So, mysterious towel-boy, what brings a \u2018spirit\u2019 to
+        my humble store?"
+    - isPlayerSpeaking: 0
+      dialogueText: I seek candy... for balance... and maybe a sugar rush.
+    - isPlayerSpeaking: 1
+      dialogueText: Ah yes, enlightenment through glucose. Classic philosophy.
+    - isPlayerSpeaking: 0
+      dialogueText: "Exactly! Wait\u2014was that sarcasm?"
+    - isPlayerSpeaking: 1
+      dialogueText: No, no, of course not. Just spiritual accounting.
+  - lines:
+    - isPlayerSpeaking: 1
+      dialogueText: "You\u2019ve been standing there for ten minutes doing nothing."
+    - isPlayerSpeaking: 0
+      dialogueText: "I\u2019m meditating."
+    - isPlayerSpeaking: 1
+      dialogueText: On what? Enlightenment?
+    - isPlayerSpeaking: 0
+      dialogueText: No, on how candy disappears faster when you close your eyes.
+    - isPlayerSpeaking: 1
+      dialogueText: Ah. A profound discovery in modern snack philosophy.
+    - isPlayerSpeaking: 0
+      dialogueText: "Thank you. I\u2019ll publish it when I learn how to spell \u2018philosophy\u2019."
+  - lines:
+    - isPlayerSpeaking: 1
+      dialogueText: "You\u2019re not fooling anyone, kid. That\u2019s a towel, not
+        a haunted robe."
+    - isPlayerSpeaking: 0
+      dialogueText: "Silence! I am the mighty Kaon\u2014 uh... Kao... Kaonushi?"
+    - isPlayerSpeaking: 1
+      dialogueText: Kaonashi.
+    - isPlayerSpeaking: 0
+      dialogueText: Right. Him. Totally me. Respect the lore.
+    - isPlayerSpeaking: 1
+      dialogueText: "I\u2019d respect it more if it didn\u2019t smell like fabric
+        softener."
+  - lines:
+    - isPlayerSpeaking: 1
+      dialogueText: "Still here, little spirit? Don\u2019t you have souls\u2014or
+        candy\u2014to haunt?"
+    - isPlayerSpeaking: 0
+      dialogueText: You talk to me a lot, bird guy. Are you lonely or just glitch
+        farming?
+    - isPlayerSpeaking: 1
+      dialogueText: I call it research. For future disappointment.
+    - isPlayerSpeaking: 0
+      dialogueText: "Cool. I call it friendship. Don\u2019t make it weird."
+  leaveDialogue:
+  - isPlayerSpeaking: 1
+    dialogueText: Off you go, spirit. Float back to wherever you came from before
+      I start charging rent.
+  - isPlayerSpeaking: 0
+    dialogueText: "Fine! But if my ghost towel gets dusty, I\u2019m blaming your
+      shop\u2019s vibe."
+  wrongItemDialogue: []
+  correctItemDialogue: []
+  sellItemDialogue: []

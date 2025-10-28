@@ -18,6 +18,7 @@ public class UIManager : NonPersistentSingleton<UIManager>
     [SerializeField] private Button goToNightButton;
     [SerializeField] private Button backButtonSell;
     [SerializeField] private Button backButtonView;
+    [SerializeField] private Button sellButton;
 
     [Header("Inventory System")]
     [SerializeField] private InventoryDatabase dayInventory;
@@ -121,6 +122,10 @@ public class UIManager : NonPersistentSingleton<UIManager>
         HideInventorySellPanel();
         HideInventoryViewPanel();
         ClearInventoryItems();
+
+        // Reactivar el botón de Sell para la próxima interacción
+        if (sellButton != null)
+            sellButton.gameObject.SetActive(true);
 
         // Mostrar botones principales al finalizar interacción
         ShowMainButtons();
@@ -468,6 +473,18 @@ public class UIManager : NonPersistentSingleton<UIManager>
     public void ShowSelectionsPanel()
     {
         if (selectionsPanel == null) return;
+
+        // Verificar si hay un personaje interactuando y si es opcional
+        if (currentInteractingCharacter != null)
+        {
+            CharacterData charData = currentInteractingCharacter.GetCharacterData();
+            if (charData != null)
+            {
+                // Si el personaje es opcional, desactivar el botón de Sell
+                if (sellButton != null)
+                    sellButton.gameObject.SetActive(!charData.isOptional);
+            }
+        }
 
         selectionsPanel.SetActive(true);
         selectionsPanel.transform.localScale = Vector3.zero;
