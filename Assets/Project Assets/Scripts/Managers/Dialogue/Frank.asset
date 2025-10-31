@@ -17,7 +17,7 @@ MonoBehaviour:
   isOptional: 0
   characterPrefab: {fileID: 5796272734848814971, guid: 841bacd9aa7645142b2a4bd0e5fef162, type: 3}
   dialogueData: {fileID: 11400000, guid: 233c312ef67a5e7499112fc9993be4c5, type: 2}
-  voicePitch: 0.35
+  voicePitch: 0.3
   voiceSound: {fileID: 8300000, guid: 2be18b9477d7e6d4ca6a684cfa72139c, type: 3}
   useJawMovement: 1
   useScaleEffect: 1
