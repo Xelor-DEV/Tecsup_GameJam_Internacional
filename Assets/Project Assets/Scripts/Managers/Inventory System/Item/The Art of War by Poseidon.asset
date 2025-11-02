@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: The Art of War by Poseidon
   icon: {fileID: 21300000, guid: c7c7c93f591bafc4d9f6a8c8c4f2e4db, type: 3}
-  itemType: 2
-  prefab: {fileID: 7192698154074345832, guid: 724a5b35dd04efa4fa4ac491ab0074a9, type: 3}
   isDroppable: 0
+  candyValue: 5
+  relatedClue: {fileID: 11400000, guid: 99431db753ab39f48968e48a904a98f7, type: 2}
+  targetCharacter: {fileID: 11400000, guid: 9cdabba1a30200140a22d7c58b23d8ba, type: 2}
+  prefab: {fileID: 7192698154074345832, guid: 724a5b35dd04efa4fa4ac491ab0074a9, type: 3}
+  itemType: 2

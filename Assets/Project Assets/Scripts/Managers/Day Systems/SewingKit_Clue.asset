@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 7cbf580ed65114042820b8986123aba7, type: 3}
-  m_Name: Clue
+  m_Name: SewingKit_Clue
   m_EditorClassIdentifier: 
-  clueName: test
+  clueName: Get Rigoberto Recade
   isFound: 0
   description: 

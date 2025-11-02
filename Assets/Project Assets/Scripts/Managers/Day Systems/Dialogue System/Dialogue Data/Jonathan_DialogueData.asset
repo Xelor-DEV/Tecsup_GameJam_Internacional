@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Jonathan_DialogueData
   m_EditorClassIdentifier: 
   speakDialogue:
-  - isPlayerSpeaking: 0
-    dialogueText: I'm looking for something comfy for this super stylish leg.
+  - lines:
+    - isPlayerSpeaking: 0
+      dialogueText: I'm looking for something comfy for this super stylish leg.
   leaveDialogue:
   - isPlayerSpeaking: 0
     dialogueText: Cloc-cloc! I'm outta here, smooth as silk!

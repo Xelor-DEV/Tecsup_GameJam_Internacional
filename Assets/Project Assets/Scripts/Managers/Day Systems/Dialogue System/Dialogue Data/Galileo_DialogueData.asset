@@ -13,9 +13,10 @@ MonoBehaviour:
   m_Name: Galileo_DialogueData
   m_EditorClassIdentifier: 
   speakDialogue:
-  - isPlayerSpeaking: 0
-    dialogueText: "I'm looking for The Art of War by Poseidon. They say it's deep\u2026
-      just like me."
+  - lines:
+    - isPlayerSpeaking: 0
+      dialogueText: "I'm looking for The Art of War by Poseidon. They say it's deep\u2026
+        just like me."
   leaveDialogue:
   - isPlayerSpeaking: 0
     dialogueText: I dive into the darkness, see you later.

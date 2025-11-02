@@ -14,6 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   itemName: Pair of Sandals
   icon: {fileID: 21300000, guid: f78eee2903218ca4ab4a2602039bc31f, type: 3}
-  itemType: 0
-  prefab: {fileID: 4898850740843613654, guid: 82d84a1ce6441dd4783dd23776b4bb65, type: 3}
   isDroppable: 0
+  candyValue: 5
+  relatedClue: {fileID: 11400000, guid: fbc36c916bf73a342b2e67e8e91e2b8c, type: 2}
+  targetCharacter: {fileID: 11400000, guid: 4525f145cb671584c936a8d8fe82f80a, type: 2}
+  prefab: {fileID: 4898850740843613654, guid: 82d84a1ce6441dd4783dd23776b4bb65, type: 3}
+  itemType: 0

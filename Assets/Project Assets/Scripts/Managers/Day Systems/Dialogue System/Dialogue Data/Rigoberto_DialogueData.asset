@@ -13,8 +13,9 @@ MonoBehaviour:
   m_Name: Rigoberto_DialogueData
   m_EditorClassIdentifier: 
   speakDialogue:
-  - isPlayerSpeaking: 0
-    dialogueText: My sack is more torn than my dreams... Kids these days are heavier.
+  - lines:
+    - isPlayerSpeaking: 0
+      dialogueText: My sack is more torn than my dreams... Kids these days are heavier.
   leaveDialogue:
   - isPlayerSpeaking: 0
     dialogueText: I'll come back once the sack is heavier.

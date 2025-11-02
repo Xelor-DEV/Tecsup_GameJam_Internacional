@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxSize: 16
   items:
-  - {fileID: 11400000, guid: 4deff8c9c9cb5e44aab884011672bec9, type: 2}
-  - {fileID: 11400000, guid: 5faa6ffb45d56ce41b703acf9c97ae83, type: 2}
-  - {fileID: 11400000, guid: fae6a2bf433920e408203c951749afb7, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

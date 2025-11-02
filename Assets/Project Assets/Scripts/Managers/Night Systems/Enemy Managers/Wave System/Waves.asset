@@ -21,7 +21,7 @@ MonoBehaviour:
     requiredItem: 2
   - waveName: Piso2
     completed: 0
-    requiredItem: 6
+    requiredItem: 0
   - waveName: Tienda
     completed: 0
-    requiredItem: 0
+    requiredItem: 6
